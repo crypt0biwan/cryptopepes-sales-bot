@@ -15,14 +15,27 @@ const formatDiscordMessage = async (openSeaClient, { data, totalPrice, buyer, se
 	const sellerUsername = (seller === "Multiple") ? "Multiple" : await getUsername(openSeaClient, seller)
 
 	const contract = '0xe59b419fac4b9b769c4439e7c4fde22418f11c89'
-	const url =
-		platforms[0] === 'LooksRare'
-			? `https://looksrare.org/collections/${contract}/${data[0]}`
-			: `https://opensea.io/assets/ethereum/${contract}/${data[0]}`;
+	let url = ''
+
+	switch(platforms[0]) {
+		case 'Blur': {
+			url = `https://blur.io/asset/${contract}/${data[0]}`
+			break
+		}
+		case 'LooksRare': {
+			url = `https://looksrare.org/collections/${contract}/${data[0]}`
+			break
+		}
+		default: {
+			url = `https://opensea.io/assets/ethereum/${contract}/${data[0]}`
+			break
+		}
+	}
+		
 	let fields = [
 		{
 			name: 'Quantity',
-			value: data.length,
+			value: data.length.toString(),
 			inline: true,
 		},
 		{
@@ -46,7 +59,8 @@ const formatDiscordMessage = async (openSeaClient, { data, totalPrice, buyer, se
 			inline: true,
 		})
 	}
-	return {
+
+	let draft = {
 		username: 'CryptoPepes Sales',
 		embeds: [
 			{
@@ -65,6 +79,8 @@ const formatDiscordMessage = async (openSeaClient, { data, totalPrice, buyer, se
 			}
 		]
 	}
+
+	return draft
 }
 
 module.exports = exports = {
