@@ -30,9 +30,6 @@ const looksAbi = require("../abis/LooksRare.json");
 const looksContract = new Ethers.Contract(LOOKSRARE_CONTRACT, looksAbi, provider);
 
 // const BLUR_CONTRACT = "0xb2ecfe4e4d61f8790bbb9de2d1259b9e2410cea5" // Blur.io: Marketplace 3
-// const blurAbi = require("../abis/Blur.json");
-// const blurContract = new Ethers.Contract(BLUR_CONTRACT, blurAbi, provider);
-
 const BLUR_POOL_CONTRACT = "0x0000000000A39bb272e79075ade125fd351887Ac"
 const blurPoolAbi = require("../abis/BlurPool.json");
 const blurPoolContract = new Ethers.Contract(BLUR_POOL_CONTRACT, blurPoolAbi, provider);
@@ -253,7 +250,7 @@ async function handleTransfer(tx) {
 function watchForTransfers(transferHandler) {
 	provider.on(eventFilter, async (log) => {
 		try {
-			const transfer = await handleCurioTransfer(log);
+			const transfer = await handleTransfer(log);
 			if (transfer.data) {
 				transferHandler(transfer);
 			}

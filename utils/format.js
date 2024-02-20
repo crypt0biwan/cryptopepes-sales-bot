@@ -67,67 +67,6 @@ const formatDiscordMessage = async (openSeaClient, { data, totalPrice, buyer, se
 	}
 }
 
-// async function uploadMedia(twitterClient, _card) {
-// 	mediaId = await twitterClient.v1.uploadMedia(`images/${getImageURL(_card)}`);
-
-// 	return mediaId;
-// }
-
-// const formatTwitterMessage = async (twitterClient, { data, totalPrice, buyer, seller, ethPrice, token, platforms }) => {
-// 	let twitterMessage;
-// 	let mediaIds = [];
-// 	let totalPriceString = formatValue(totalPrice, 2)
-
-// 	if (Object.keys(data).length == 1) {
-// 		let totalPriceUsdString = "";
-// 		if (['ETH', 'WETH'].includes(token)) {
-// 			totalPriceUsdString = `(${formatValue(totalPrice * ethPrice, 0, 'currency')}) `;
-// 		}
-
-// 		let platformString = "";
-// 		if (platforms.length > 1) {
-// 			platformString = `on ${platforms[0]}!`;
-// 		} else if (platforms.length > 0) {
-// 			platformString = `on ${platforms.join(", ")}!`;
-// 		}
-
-// 		const cardNum = Object.keys(data)[0];
-// 		const cardCount = Object.values(data)[0];
-// 		let qtyString = "";
-// 		if (cardCount > 1) {
-// 			qtyString = `${cardCount}x `;
-// 		}
-// 		if (cardNum == "172") {
-// 			twitterMessage = `${qtyString}Curio Card 17b (misprint) sold for ${totalPriceString} ${token} ${totalPriceUsdString}${platformString}\n\nhttps://opensea.io/assets/ethereum/0x04AfA589E2b933f9463C5639f412b183Ec062505/${cardNum}`;
-// 		} else {
-// 			twitterMessage = `${qtyString}Curio Card ${cardNum} sold for ${totalPriceString} ${token} ${totalPriceUsdString}${platformString}\n\nhttps://opensea.io/assets/ethereum/0x73DA73EF3a6982109c4d5BDb0dB9dd3E3783f313/${cardNum}`;
-// 		}
-
-// 		mediaIds = [await uploadMedia(twitterClient, cardNum)];
-// 	} else {
-// 		let qtyString = Object.entries(data).map(q => {
-// 			if (q[0] == "172") {
-// 				return `${q[1]}x Curio 17b (misprint)`;
-// 			} else {
-// 				return `${q[1]}x Curio ${q[0]}`;
-// 			}
-// 		}).join('\n');
-
-// 		let totalPriceUsdString = "";
-// 		if (['ETH', 'WETH'].includes(token)) {
-// 			totalPriceUsdString = `(${formatValue(totalPrice * ethPrice, 0, 'currency')})`;
-// 		}
-
-// 		const cardNums = Object.keys(data).slice(0, 4);
-
-// 		twitterMessage = `Multiple Curio Cards sold for a total of ${totalPriceString} ${token} ${totalPriceUsdString}!\n${qtyString}`;
-// 		mediaIds = await Promise.all(cardNums.map(card => uploadMedia(twitterClient, card)));
-// 	}
-
-// 	return [twitterMessage, mediaIds];
-// }
-
 module.exports = exports = {
 	formatDiscordMessage,
-	// formatTwitterMessage,
 }
