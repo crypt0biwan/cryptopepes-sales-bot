@@ -1,4 +1,4 @@
-# curio-sales-bot
+# cryptopepes-sales-bot
 
 # Setup
 Make sure you have the proper Node version installed (see `.nvmrc` file)
