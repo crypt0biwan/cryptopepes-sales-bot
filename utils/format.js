@@ -1,5 +1,6 @@
 const COLORS = require('./colors')
 const { getUsername } = require('./opensea')
+const genInfo = require('../data/gen-info.json')
 
 // style = currency to include dollar sign
 const formatValue = (value, decimals = 2, style = 'decimal') =>
@@ -15,6 +16,8 @@ const formatDiscordMessage = async (openSeaClient, { data, totalPrice, buyer, se
 	const sellerUsername = (seller === "Multiple") ? "Multiple" : await getUsername(openSeaClient, seller)
 
 	const contract = '0xe59b419fac4b9b769c4439e7c4fde22418f11c89'
+	
+	let gen = '?'
 	let url = ''
 
 	switch(platforms[0]) {
@@ -34,11 +37,6 @@ const formatDiscordMessage = async (openSeaClient, { data, totalPrice, buyer, se
 		
 	let fields = [
 		{
-			name: 'Quantity',
-			value: data.length.toString(),
-			inline: true,
-		},
-		{
 			name: token,
 			value: formatValue(parseFloat(totalPrice), 2),
 			inline: true,
@@ -47,9 +45,10 @@ const formatDiscordMessage = async (openSeaClient, { data, totalPrice, buyer, se
 
 	let title = "";
 	if (data.length > 1) {
-		title = `CryptoPepes ${cards.join(", ")} have been sold`;
+		title = `CryptoPepes ${data.join(", ")} have been sold`;
 	} else {
 		title = `CryptoPepe ${data[0]} has been sold`;
+		gen = genInfo.find(g => g.id === data[0]).gen
 	}
 
 	if (['ETH', 'WETH'].includes(token)) {
@@ -60,6 +59,8 @@ const formatDiscordMessage = async (openSeaClient, { data, totalPrice, buyer, se
 		})
 	}
 
+	let color = token === 'WETH' ? COLORS.LIGHTBLUE : COLORS.GREEN
+
 	let draft = {
 		username: 'CryptoPepes Sales',
 		embeds: [
@@ -68,12 +69,12 @@ const formatDiscordMessage = async (openSeaClient, { data, totalPrice, buyer, se
 					name: 'CryptoPepes',
 				},
 				title: title,
-				description: `${platforms.length > 1 ? "Platforms" : "Platform"}: **${platforms.join(", ")}**\nBuyer: **${buyerUsername}**\nSeller: **${sellerUsername}**\n---------------------------------`,
+				description: `${data.length === 1 ? `Gen: **${gen}**\n` : ''}${platforms.length > 1 ? "Platforms" : "Platform"}: **${platforms.join(", ")}**\nBuyer: **${buyerUsername}**\nSeller: **${sellerUsername}**\n---------------------------------`,
 				url,
 				thumbnail: {
-					url: `https://cryptopepes.wtf/imgs/${data[0]}.svg`
+					url: `https://raw.githubusercontent.com/crypt0biwan/cryptopepes-sales-bot/main/images/300x300/${data[0]}.png`
 				},
-				color: COLORS.GREEN,
+				color,
 				fields,
 				timestamp: new Date()
 			}
